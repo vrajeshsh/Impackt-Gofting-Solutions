@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Spinner from "@/components/Spinner";
@@ -25,9 +25,15 @@ export default function ProductForm({
     const [categories,setCategories] = useState([]);
     const router = useRouter();
 
+    useEffect(() => {
+        axios.get('/api/categories').then(result => {
+          setCategories(result.data);
+        })
+      }, []);
+      
     async function saveProduct(ev){
         ev.preventDefault();
-        const data = {title, description, price, images};
+        const data = {title, description, price, images, category};
         if (_id) {
             //update
             await axios.put('/api/products', {...data,_id});
@@ -66,6 +72,14 @@ export default function ProductForm({
             
             <label>Product Name</label>
             <input type="text" placeholder="Product Name" value={title} onChange={ev => setTitle(ev.target.value)}/>
+            <label>Category</label>
+        <select value={category}
+                onChange={ev => setCategory(ev.target.value)}>
+          <option value="">Uncategorized</option>
+          {categories.length > 0 && categories.map(c => (
+            <option key={c._id} value={c._id}>{c.name}</option>
+          ))}
+          </select>
             <label>
                 Photos 
             </label>
