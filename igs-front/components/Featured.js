@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Button from "@/components/Button";
 import ButtonLink from "@/components/ButtonLink";
 import CartIcon from "@/components/icons/CartIcon";
+import {useContext} from "react";
+import {CartContext} from "@/components/CartContext";
 
 const Bg = styled.div`
   background-color: #222;
@@ -55,33 +57,32 @@ const ButtonsWrapper = styled.div`
 `;
 
 export default function Featured({product}) {
-  
+  const {addProduct} = useContext(CartContext);
+  function addFeaturedToCart() {
+    addProduct(product._id);
+  }
   return (
     <Bg>
-    <Center>
+      <Center>
         <ColumnsWrapper>
-            <Column>
+          <Column>
             <div>
-            <Title>{product.Title}</Title>
-    <Desc>Lorem ipsum</Desc>
-    <ButtonsWrapper>
-    <Button outline white size="l">Read more</Button>
-    <Button primary size="l">
-        <CartIcon />
-        Add to cart</Button>
-
-    </ButtonsWrapper>
-
+              <Title>{product?.title}</Title>
+              <Desc>{product?.description}</Desc>
+              <ButtonsWrapper>
+                <ButtonLink href={'/product/'+product?._id} outline={1} white={1}>Read more</ButtonLink>
+                <Button white onClick={addFeaturedToCart}>
+                  <CartIcon />
+                  Add to cart
+                </Button>
+              </ButtonsWrapper>
             </div>
-    
-            </Column>
-            <Column>
-                <img src="https://imgv3.fotor.com/images/blog-cover-image/a-mac-and-iphone-on-the-white-desk.jpg" alt=""/>
-            </Column>
+          </Column>
+          <Column>
+            <img src="https://next-igs.s3.amazonaws.com/1695560432151.jpg" alt=""/>
+          </Column>
         </ColumnsWrapper>
-    
-
-    </Center>
+      </Center>
 
     </Bg>
   );
